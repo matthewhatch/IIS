@@ -262,7 +262,7 @@ Function Get-IISAppPool{
             loadUserProfile = $PoolConfig.add.processModel.loadUserProfile
             Enable32Bit = $PoolConfig.Add.Enable32BitAppOnWin64
             queueLength = $PoolConfig.add.queueLength
-            managedRuntimeLoader = $PoolConfig.add.managedRuntimeLoader;
+            managedRuntimeLoader = $PoolConfig.add.managedRuntimeLoader
             enableConfigurationOverride = $PoolConfig.add.enableConfigurationOverride
             CLRConfigFile = $PoolConfig.add.CLRConfigFile
             passAnonymousToken = $PoolConfig.add.passAnonymousToken
@@ -718,4 +718,72 @@ Function Set-IISAppPool{
         }
     }
     
+}
+<#
+    .SYNOPSIS
+        Returns a PSCredential object representaion of the AppPool Identity
+
+    .DESCRIPTION
+        Returns a PSCredential object representaion of the AppPool Identity. If there is no Identity set it will return $null
+
+    .PARAMETER Name
+        Name of the AppPool
+#>
+Function Get-IISAPPPoolCredential{
+    [CmdletBinding()]
+    param(
+        [System.String]
+        $Name
+    )
+    
+    $PoolConfig = Get-AppPoolConfig -Name $Name
+
+    if($PoolConfig.add.processModel.userName){
+        $AppPoolPassword = $PoolConfig.add.processModel.password | ConvertTo-SecureString -AsPlainText -Force
+        $AppPoolCred = new-object -typename System.Management.Automation.PSCredential -argumentlist $PoolConfig.add.processModel.userName,$AppPoolPassword   
+    }else{
+        $AppPoolCred = $null
+    }
+
+    Write-Output $AppPoolCred
+}
+
+<#
+    .SYNOPSIS
+        Returns palintext password configured for the apppool Identity
+
+    .DESCRIPTION
+
+    .PARAMETER Name
+        Name of the AppPool
+
+#>
+Function Get-IISAPPoolPassword{
+    [CmdletBinding()]
+    param(
+        [System.String]
+        $Name
+    )
+
+    $PoolConfig = Get-AppPoolConfig -Name $Name
+    $PoolConfig.add.processModel.password
+}
+
+
+<#
+    .SYNOPSIS
+        Returns the AppPoolConfig as an XML Document Object
+
+    .PARAMETER Name 
+        Name of the AppPool
+#>
+Function Get-IISAppPoolConfig{
+    [CmdletBinding()]
+    param(
+        [System.String]
+        $Name
+    )
+    
+    [xml]$PoolConfig = & $env:SystemRoot\system32\inetsrv\appcmd.exe list apppool $Name /config:*
+    Write-Output $PoolConfig
 }
