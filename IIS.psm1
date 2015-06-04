@@ -736,7 +736,7 @@ Function Get-IISAPPPoolCredential{
         $Name
     )
     
-    $PoolConfig = Get-AppPoolConfig -Name $Name
+    $PoolConfig = Get-IISAppPoolConfig -Name $Name
 
     if($PoolConfig.add.processModel.userName){
         $AppPoolPassword = $PoolConfig.add.processModel.password | ConvertTo-SecureString -AsPlainText -Force
@@ -765,7 +765,7 @@ Function Get-IISAPPoolPassword{
         $Name
     )
 
-    $PoolConfig = Get-AppPoolConfig -Name $Name
+    $PoolConfig = Get-IISAppPoolConfig -Name $Name
     $PoolConfig.add.processModel.password
 }
 
