@@ -5,10 +5,12 @@
 ##Cmdlets
 
 ```powershell  
-Get-IISAppPool -Name TestAppPool
-Get-IISAppPoolConfig -Name TestAppPool
-Get-IISAppPoolCredential -Name TestAppPool
-Get-IISAppPoolPassword -Name TestAppPool
+Get-IISAppPool
+Get-IISAppPoolConfig
+Get-IISAppPoolCredential
+Get-IISAppPoolPassword
+New-IISAppPool
+Set-IISAppPool
 ```
 
 ##Installation
@@ -49,4 +51,66 @@ Get-IISAppPoolConfig -Name 'TheNameOfYourPool'
 Returns the clear text password used for the Apppool Identity
 ```powershell
 Get-IISAppPoolPassword -Name 'TheNameOfYourPool'
+```
+
+###New-IISAppPool
+Adds a new Application Pool, if no parameters are passed then the apppool is created with the deault settings
+
+```powershell
+New-IISAppPool -Name 'SomeAppPool' -Enable32Bit $true
+```
+
+Available settings to pass as parameters
+
+* autoStart
+* managedRuntimeVersion
+* managedPipelineMode
+* startMode
+* identityType
+* userName
+* password
+* loadUserProfile
+* Enable32Bit
+* queueLength
+* managedRuntimeLoader
+* enableConfigurationOverride
+* CLRConfigFile
+* passAnonymousToken
+* logonType
+* manualGroupMembership
+* idleTimeout
+* maxProcesses
+* shutdownTimeLimit
+* startupTimeLimit
+* pingingEnabled
+* pingInterval
+* pingResponseTime
+* disallowOverlappingRotation
+* disallowRotationOnConfigChange
+* logEventOnRecycle
+* restartMemoryLimit
+* restartPrivateMemoryLimit
+* restartRequestsLimit
+* restartTimeLimit
+* restartSchedule
+* loadBalancerCapabilities
+* orphanWorkerProcess
+* orphanActionExe
+* orphanActionParams
+* rapidFailProtection
+* rapidFailProtectionInterval
+* rapidFailProtectionMaxCrashes
+* autoShutdownExe
+* autoShutdownParams
+* cpuLimit
+* cpuAction
+* cpuResetInterval
+* cpuSmpAffinitized
+* cpuSmpProcessorAffinityMask
+* cpuSmpProcessorAffinityMask2
+
+###Set-IISAppPool
+
+```powershell
+Set-IISAppPool -Name 'SomeAppPool' -maxProcesses 10
 ```
