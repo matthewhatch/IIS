@@ -1,4 +1,4 @@
-﻿Import-Module IIS -Force
+﻿Import-Module $PSScriptRoot/IIS -Force
 
 
 New-IISAppPool -Name Pester

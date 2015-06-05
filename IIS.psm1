@@ -732,20 +732,23 @@ Function Set-IISAppPool{
 Function Get-IISAPPPoolCredential{
     [CmdletBinding()]
     param(
-        [System.String]
+        [System.String[]]
         $Name
     )
     
-    $PoolConfig = Get-IISAppPoolConfig -Name $Name
+    $Name | Foreach{
+        $PoolConfig = Get-IISAppPoolConfig -Name $_
 
-    if($PoolConfig.add.processModel.userName){
-        $AppPoolPassword = $PoolConfig.add.processModel.password | ConvertTo-SecureString -AsPlainText -Force
-        $AppPoolCred = new-object -typename System.Management.Automation.PSCredential -argumentlist $PoolConfig.add.processModel.userName,$AppPoolPassword   
-    }else{
-        $AppPoolCred = $null
+        if($PoolConfig.add.processModel.userName){
+            $AppPoolPassword = $PoolConfig.add.processModel.password | ConvertTo-SecureString -AsPlainText -Force
+            $AppPoolCred = new-object -typename System.Management.Automation.PSCredential -argumentlist $PoolConfig.add.processModel.userName,$AppPoolPassword   
+        }else{
+            $AppPoolCred = $null
+        }
+
+        Write-Output $AppPoolCred
     }
-
-    Write-Output $AppPoolCred
+    
 }
 
 <#
