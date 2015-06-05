@@ -176,30 +176,8 @@ Function New-IISAppPool{
     $Name | Foreach {
         New-WebAppPool $_ | Out-Null
 
-        Stop-WebAppPool $_ 
-        Set-IISAppPool @PSBoundParameters         
-        <#Set-IISAppPool -Name $_ -AutoStart $AutoStart
-        Set-IISAppPool -Name $_ -managedRuntimeVersion $managedRuntimeVersion
-        Set-IISAppPool -Name $_ -managedPipelineMode $managedPipelineMode
-        Set-IISAppPool -Name $_ -startMode $startMode
-        Set-IISAppPool -Name $_ -identityType $identityType    
-        Set-IISAppPool -Name $_ -loadUserProfile $loadUserProfile        
-        Set-IISAppPool -Name $_ -Enable32Bit $Enable32Bit
-        Set-IISAppPool -Name $_ -queueLength $queueLength
-        if($managedRuntimeLoader){Set-IISAppPool -Name $_ -managedRuntimeLoader $managedRuntimeLoader}
-   
-        #set username and password if username is provided
-        if($PSBoundParameters.ContainsKey('Credential')){
-            $userName = ($Credential.UserName)
-            Set-IISAppPool -Name $_ -Credential $Credential
-        }
-
-        Write-Verbose("successfully created AppPool $_")
-                
-        if($autoStart -eq "true"){
-            Start-WebAppPool $_
-            Write-Verbose "successfully started AppPool $_"
-        }#>
+        #Stop-WebAppPool $_ 
+        Set-IISAppPool @PSBoundParameters
         
     }
     
