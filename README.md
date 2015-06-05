@@ -1,5 +1,7 @@
 #IIS
 
+[![Build status](https://ci.appveyor.com/api/projects/status/uy8wcyj44iwmxi7o/branch/master?svg=true)](https://ci.appveyor.com/project/matthewhatch/iis/branch/master)
+
 [![Join the chat at https://gitter.im/matthewhatch/IIS](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/matthewhatch/IIS?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ##Cmdlets
