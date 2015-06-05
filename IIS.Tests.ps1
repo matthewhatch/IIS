@@ -1,10 +1,13 @@
 ﻿Import-Module $PSScriptRoot/IIS -Force
 
-
-New-IISAppPool -Name Pester
-
 Describe 'New-IISAppPool' {
-    
+     BeforeAll{
+        New-IISAppPool -Name Pester 
+    }
+
+    AfterAll{
+        Remove-Item IIS:\AppPools\Pester -Force -Recurse 
+    }
     $Pool = Get-IISAppPool -Name Pester
     
     Context 'AppPool Properties for default settings'{
@@ -427,6 +430,14 @@ Describe 'New-IISAppPool' {
 }
 
 Describe 'Set-IISAppPool'{
+     BeforeAll{
+        New-IISAppPool -Name Pester 
+    }
+
+    AfterAll{
+        Remove-Item IIS:\AppPools\Pester -Force -Recurse  
+    }
+
     It 'should update queueLength'{
         Set-IISAppPool -Name 'Pester' -queueLength '1111'
         (Get-IISAppPool -Name 'Pester').queueLength | Should Be '1111'
@@ -613,4 +624,42 @@ Describe 'Set-IISAppPool'{
     }
 }
 
-Remove-Item iis:\apppools\PEster -force -Recurse
+Describe 'Get-IISAppPoolCredential' {
+    BeforeAll{
+        $secpasswd = ConvertTo-SecureString 'PlainTextPassword' -AsPlainText -Force
+        $Cred = New-Object -TypeName PSCredential('username',$secpasswd)
+        
+        New-IISAppPool -Name Pester -Credential $Cred
+        New-WebAppPool -Name NoUser | Out-Null   
+    }
+
+    AfterAll{
+        Remove-Item IIS:\AppPools\NoUser -Force -Recurse 
+        Remove-Item IIS:\AppPools\Pester -Force -Recurse  
+    }
+
+    Context 'When AppPool has SpecificUser as identity' {
+        
+        $AppPool = Get-IISAPPPoolCredential -Name Pester 
+
+        It 'Should return a PSCredential' {
+            $AppPool.GetType().Name | should Be 'PSCredential'
+        }
+
+        It 'Should return a Credential with username correctly' {
+            $AppPool.Username | Should Be 'username'
+        }
+
+        It 'Should return a Credential with password set correctly' {
+            $AppPool.GetNetworkCredential().password | should Be 'PlainTextPassword'
+        }
+    }
+
+   
+
+    Context 'When apppool does not use SpecificUser as Identity' {
+        It 'Should return $null' {
+            Get-IISAPPPoolCredential -Name NoUser | should Be $null
+        }
+    }
+}

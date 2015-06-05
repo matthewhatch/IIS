@@ -707,7 +707,7 @@ Function Set-IISAppPool{
     .PARAMETER Name
         Name of the AppPool
 #>
-Function Get-IISAPPPoolCredential{
+Function Get-IISAppPoolCredential{
     [CmdletBinding()]
     param(
         [System.String[]]
@@ -739,7 +739,7 @@ Function Get-IISAPPPoolCredential{
         Name of the AppPool
 
 #>
-Function Get-IISAPPoolPassword{
+Function Get-IISAppPoolPassword{
     [CmdletBinding()]
     param(
         [System.String]
